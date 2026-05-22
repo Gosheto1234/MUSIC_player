@@ -146,9 +146,9 @@ The player uses `LoadDirectoryFilesEx()` to scan the `music/` directory with sup
 
 - [x] Add pause/resume functionality
 - [ ] Implement playlist shuffling
-- [ ] Support additional audio formats (FLAC, AAC)
 - [ ] New ui
-- [ ] Volume controls
+- [x] Volume controls
+- [ ] Volume saving
 
 ---
 
