@@ -33,6 +33,11 @@ bool molq_pusni_se;
 
 bool pause;
 
+int volume_slide;
+
+int sila_zvuk = 600;
+
+float volume = 1.0f;
 
 FilePathList music_files;
 
@@ -55,7 +60,7 @@ void get_music_files()
 {
     //FilePathList LoadDirectoryFilesEx(const char *basePath, const char *filter, bool scanSubdirs);
     //use ; to seperate different filters
-    music_files = LoadDirectoryFilesEx("music", ".mp3;.ogg;.wav", false);
+    music_files = LoadDirectoryFilesEx("music", ".mp3;.ogg;.wav;", false);
     if(music_files.count > 0)
     {
         files = true;
@@ -64,7 +69,7 @@ void get_music_files()
 
 int max_files = music_files.count;
 
-//TODO ADD VOLUME CONTROLS AND REFACTOR UI
+//TODO ADD VOLUME SAVING AND REFACTOR UI
 
 
 
@@ -130,8 +135,60 @@ int main(void)
             DrawText("CLICK YOUR FAVOURITE MUSIC TO START PLAYING IT <3", 300, 200, 20, WHITE);
             
             
+           
+            for(int j = 0; j <= 100; j++)
+            {
+                DrawRectangle(1350 , 600 + (j + 1) , 20, 10 , WHITE);
+            }
             
+             
+             
+            //DrawCircle(1360, sila_zvuk, 20, GRAY); 
             
+            if(CheckCollisionPointCircle(mishka, {1360 , sila_zvuk} , 20))
+            {
+                if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+                {
+                    //logic yoy
+                    if(mishka.y > sila_zvuk)
+                    {
+                        sila_zvuk++;
+                        volume -= 0.01f;
+                    }
+                    else if(mishka.y < sila_zvuk)
+                    {
+                        sila_zvuk--;
+                        volume += 0.01f;
+                    }
+                    if(sila_zvuk <= 600)
+                    {
+                        sila_zvuk = 600;
+                        
+                    }
+                    else if(sila_zvuk >= 700)
+                    {
+                        sila_zvuk = 700;
+                    }
+                    if (volume < 0.0f) 
+                    {
+                        volume = 0.0f;
+                    }
+                    else if (volume > 1.0f) 
+                    {
+                        volume = 1.0f;
+                    }
+                    
+                    
+                }
+            }
+           DrawCircle(1360, sila_zvuk, 20, GRAY); 
+           
+           
+           
+           SetMusicVolume(muzika, volume);
+           DrawText(TextFormat("Music volume: %0.1f", volume ) , 190 , 450 , 20 ,WHITE);
+           
+           
             
             DrawRectangle(1400, 200, 600, 700, GRAY);
             if(enable_pause == true)
@@ -140,8 +197,8 @@ int main(void)
                 if(pause == false)
                 {
                     //DrawTriangle({1670 , 950}, {1670 , 1050} , {1750 , 1000} , RED);
-                    DrawRectangle(1670 , 970 , 20, 60 , RED);
-                    DrawRectangle(1710 , 970 , 20, 60 , RED);
+                    DrawRectangle(1670 , 970 , 20, 60 , BLACK);
+                    DrawRectangle(1710 , 970 , 20, 60 , BLACK);
                     if(CheckCollisionPointCircle(mishka, {1700 , 1000} , 60))
                         {
                             if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
@@ -152,7 +209,7 @@ int main(void)
                 }
                 else if (pause == true)
                 {
-                    DrawTriangle({1670 , 950}, {1670 , 1050} , {1750 , 1000} , RED);
+                    DrawTriangle({1680 , 970}, {1680 , 1030} , {1730 , 1000} , BLACK);
                     if(CheckCollisionPointCircle(mishka, {1700 , 1000} , 60))
                         {
                             if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
@@ -175,7 +232,7 @@ int main(void)
                 MakeDirectory("music");
                 DrawText("MUSIC DIRECTORY IS MADE NOW . REBOOT TO REMOVE THIS MESSAGE", 190, 250, 20, WHITE);
             }
-            if(is_name_ready == true)    
+            if(is_name_ready == true)
             {
                 DrawText("NAMES CAN BE GETTED", 190, 300, 20, WHITE);
             } 
@@ -221,7 +278,7 @@ int main(void)
                 }
                 
             }
-            
+            //SetMusicVolume(muzika , 0.01);
             if (music_is_selected)
             {
                 if(pause == false)
@@ -249,10 +306,16 @@ int main(void)
                 DrawText(music_files.paths[selected_music],190, 250, 20, WHITE );
             }
             
+            /*
+            ADDITIONAL FILTERING : 
+            %.0f   // 123
+            %.1f   // 123.4
+            %.2f   // 123.45
+            %.3f   // 123.456
+            */
             
-            
-            DrawText(TextFormat("Playing for: %f" , GetMusicTimePlayed(muzika)),190, 350, 20, WHITE );
-            DrawText(TextFormat("Full time of the music: %f" , GetMusicTimeLength(muzika)),190, 400, 20, WHITE );
+            DrawText(TextFormat("Playing for: %.1f" , GetMusicTimePlayed(muzika)),190, 350, 20, WHITE );
+            DrawText(TextFormat("Full time of the music: %.1f" , GetMusicTimeLength(muzika)),190, 400, 20, WHITE );
             
             full_song_time = GetMusicTimeLength(muzika);
             if(GetMusicTimePlayed(muzika) >= full_song_time)
