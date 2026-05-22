@@ -14,6 +14,7 @@ int selected_music = -1;
 float full_song_time;
 
 
+
 bool is_name_ready;
 
 bool music_directory_exists;
@@ -50,7 +51,8 @@ void directory_check()
 void get_music_files()
 {
     //FilePathList LoadDirectoryFilesEx(const char *basePath, const char *filter, bool scanSubdirs);
-    music_files = LoadDirectoryFilesEx("music", ".mp3", false);
+    //use ; to seperate different filters
+    music_files = LoadDirectoryFilesEx("music", ".mp3;.ogg;.wav", false);
     if(music_files.count > 0)
     {
         files = true;
@@ -123,6 +125,7 @@ int main(void)
             ClearBackground(BLACK);
             DrawText("MUSIC PLAYER", 1500, 100, 20, WHITE);
             DrawText("CLICK YOUR FAVOURITE MUSIC TO START PLAYING IT <3", 300, 200, 20, WHITE);
+            DrawText("CLICK YOUR FAVOURITE MUSIC TO START PLAYING IT <3", 300, 200, 20, WHITE);
             
             
             DrawRectangle(1400, 200, 600, 700, GRAY);
@@ -162,10 +165,13 @@ int main(void)
             {
                 for(int i = 0; i < music_files.count; i++)
                 {
-                    Rectangle get_sound = { 1400, 200 + (i * 15), 600, 20 };
-                    DrawRectangleRec(get_sound, BLANK);
+                    Rectangle get_sound = { 1400, 190 + (i * 20) , 600, 20 };
+                    //DrawRectangleRec(get_sound, BLANK);
+                    DrawRectangle(1400 , 200 + (i * 20), 600, 20 , BLANK);
                     DrawText(music_files.paths[i], 1400, 200 + (i * 20), 20, WHITE);
-                    //DrawRectangle(1400, 200 + (i * 20), 600, 20, BLANK);
+                    
+                    
+                    
                     if(CheckCollisionPointRec(mishka, get_sound))
                     {
                         if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
