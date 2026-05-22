@@ -13,7 +13,7 @@ int selected_music = -1;
 
 float full_song_time;
 
-
+bool enable_pause = false;
 
 bool is_name_ready;
 
@@ -30,6 +30,9 @@ bool music_is_selected;
 bool muzikata_e_pusnata;
 
 bool molq_pusni_se;
+
+bool pause;
+
 
 FilePathList music_files;
 
@@ -61,7 +64,7 @@ void get_music_files()
 
 int max_files = music_files.count;
 
-
+//TODO ADD VOLUME CONTROLS AND REFACTOR UI
 
 
 
@@ -125,13 +128,40 @@ int main(void)
             ClearBackground(BLACK);
             DrawText("MUSIC PLAYER", 1500, 100, 20, WHITE);
             DrawText("CLICK YOUR FAVOURITE MUSIC TO START PLAYING IT <3", 300, 200, 20, WHITE);
-            DrawText("CLICK YOUR FAVOURITE MUSIC TO START PLAYING IT <3", 300, 200, 20, WHITE);
+            
+            
+            
             
             
             DrawRectangle(1400, 200, 600, 700, GRAY);
-            
-            
-            
+            if(enable_pause == true)
+            {
+                DrawCircle(1700 , 1000 , 60 , GRAY);
+                if(pause == false)
+                {
+                    //DrawTriangle({1670 , 950}, {1670 , 1050} , {1750 , 1000} , RED);
+                    DrawRectangle(1670 , 970 , 20, 60 , RED);
+                    DrawRectangle(1710 , 970 , 20, 60 , RED);
+                    if(CheckCollisionPointCircle(mishka, {1700 , 1000} , 60))
+                        {
+                            if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                            {
+                                pause = true;
+                            }
+                        }
+                }
+                else if (pause == true)
+                {
+                    DrawTriangle({1670 , 950}, {1670 , 1050} , {1750 , 1000} , RED);
+                    if(CheckCollisionPointCircle(mishka, {1700 , 1000} , 60))
+                        {
+                            if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                            {
+                                pause = false;
+                            }
+                        }
+                }
+            }
             
             
             if (debug == true)
@@ -165,7 +195,7 @@ int main(void)
             {
                 for(int i = 0; i < music_files.count; i++)
                 {
-                    Rectangle get_sound = { 1400, 190 + (i * 20) , 600, 20 };
+                    get_sound = { 1400, 190 + (i * 20) , 600, 20 };
                     //DrawRectangleRec(get_sound, BLANK);
                     DrawRectangle(1400 , 200 + (i * 20), 600, 20 , BLANK);
                     DrawText(music_files.paths[i], 1400, 200 + (i * 20), 20, WHITE);
@@ -184,7 +214,8 @@ int main(void)
                             muzikata_e_pusnata = true;
                             GetMusicTimeLength(muzika);
                             molq_pusni_se = false;
-                            
+                            pause = false;
+                            enable_pause = true;
                         }
                     }
                 }
@@ -193,8 +224,13 @@ int main(void)
             
             if (music_is_selected)
             {
-                UpdateMusicStream(muzika);
-            }
+                if(pause == false)
+                {
+                    UpdateMusicStream(muzika);
+                }
+           
+           }
+            
             
             
             if(muzikata_e_pusnata == true)
@@ -224,7 +260,6 @@ int main(void)
                 molq_pusni_se = false;
                 DrawText(music_files.paths[selected_music],190, 250, 20, WHITE );
             }
-            
             
             
             
