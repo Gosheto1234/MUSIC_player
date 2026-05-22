@@ -148,7 +148,6 @@ The player uses `LoadDirectoryFilesEx()` to scan the `music/` directory with sup
 - [ ] Implement playlist shuffling
 - [ ] New ui
 - [x] Volume controls
-- [ ] Volume saving
 
 ---
 
