@@ -41,6 +41,8 @@ float volume = 1.0f;
 
 FilePathList music_files;
 
+bool low_res;
+
 void directory_check()
 {
     DirectoryExists("music");
@@ -69,8 +71,8 @@ void get_music_files()
 
 int max_files = music_files.count;
 
-//TODO ADD VOLUME SAVING AND REFACTOR UI
-
+//TODO REFACTOR UI AND MAKE MORE RESPONSIVE VOLUME SLIDER
+//TODO MAKE PORT FOR 1080p MONITORS
 
 
 
@@ -85,6 +87,11 @@ int main(void)
     int screenHeight = GetScreenHeight();
     InitWindow(screenWidth, screenHeight, "Media player");//TODO: invent a name
     //MaximizeWindow();
+    
+    if(GetScreenWidth() == 1920 && GetScreenHeight() == 1080)
+    {
+        low_res = true;
+    }
     
     
     //AUDIO INITIALIZATION
@@ -134,6 +141,10 @@ int main(void)
             DrawText("MUSIC PLAYER", 1500, 100, 20, WHITE);
             DrawText("CLICK YOUR FAVOURITE MUSIC TO START PLAYING IT <3", 300, 200, 20, WHITE);
             
+            if(low_res)
+            {
+                DrawText("low res enabled", 300 , 500 , 20 , RED);
+            }
             
            
             for(int j = 0; j <= 100; j++)
